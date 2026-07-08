@@ -1,6 +1,6 @@
 package com.telcel.notifica.saldo.provider;
 
-import com.telcel.notifica.saldo.mapper.FacturaMapper;
+import com.telcel.notifica.saldo.mapper.SaldosMapper;
 
 import java.sql.Connection;
 
@@ -8,10 +8,8 @@ public interface DatabaseProvider {
 
     Connection getConnection() throws Exception;
 
-    String getConsultarFacturas();
+    String getConsutarSaldo();
 
-    String getActualizarFactura();
-
-    FacturaMapper getFacturaMapper();
+    SaldosMapper getSaldosMapper();
 
 }

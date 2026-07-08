@@ -1,61 +1,61 @@
 package com.telcel.notifica.saldo.dao;
 
-import com.telcel.notifica.saldo.provider.OracleProvider;
+import com.telcel.notifica.saldo.mapper.SaldosMapper;
+import com.telcel.notifica.saldo.provider.DatabaseProvider;
+import com.telcel.notifica.saldo.provider.ProviderFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ConsultasDAO {
 
-  public List<Saldos> checaSaldo() throws SQLException {
+    private static final Logger logger =
+            Logger.getLogger(ConsultasDAO.class.getName());
 
-    List<Saldos> saldos = new ArrayList<>();
-/*
-    String sql =
-            "SELECT CL.NOMBRE AS CADENA, " +
-                    "FC.MONTO_RESTA AS SALDO " +
-                    "FROM VI0ADM01.CLIENTE CL, " +
-                    "VI0ADM01.V_SUM_BOLSA_FACTURA FC " +
-                    "WHERE CL.ID_CLIENTE = FC.ID_BOLSA";
-*/
+    private final DatabaseProvider provider = ProviderFactory.getProvider();
 
-    String sql =
-            "SELECT C.NOMBRE AS CADENA, " +
-                    "       L.MONTO_COMPRA AS SALDO " +
-                    "FROM CLIENTE C " +
-                    "INNER JOIN LOG_FAC_SAP L ON C.RFC = L.RFC";
+    private Connection con;
 
-    System.out.println("sql " + sql);
 
-    OracleProvider provider = new OracleProvider();
+    public List<Saldos> checaSaldo() throws SQLException {
 
-    try (Connection con = provider.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
+        List<Saldos> saldos = new ArrayList<>();
 
-      while (rs.next()) {
+        String sql = provider.getConsutarSaldo();
 
-        saldos.add(
-                new Saldos(
-                        rs.getString("CADENA"),
-                        rs.getLong("SALDO")));
+        logger.info("sql: " + sql);
 
-      }
+        try (Connection con = provider.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql);
+        ) {
+            SaldosMapper mapper = provider.getSaldosMapper();
 
-      System.out.println("[BD] Total de saldos: " + saldos.size());
+            while (rs.next()) {
+                /*
+                System.out.println(
+                        rs.getString("CADENA")
+                                + " -> "
+                                + rs.getLong("SALDO"));
 
-    } catch (Exception e) {
+                 */
 
-      throw new SQLException(e);
+                saldos.add(mapper.map(rs));
+            }
+
+            logger.info("[BD] Total de saldos: " + saldos.size());
+
+            return saldos;
+
+        } catch (Exception e) {
+
+            throw new SQLException("Error consultando saldos.", e);
+
+        }
 
     }
-
-    return saldos;
-
-  }
 
 }

@@ -4,6 +4,7 @@ import com.telcel.mail.EnviaMail;
 import com.telcel.notifica.saldo.dao.Saldos;
 import com.telcel.notifica.saldo.utils.ConfigReader;
 import com.telcel.notifica.saldo.utils.GetUtil;
+import com.telcel.notifica.saldo.utils.PropiedadesSmtp;
 
 import java.util.Set;
 
@@ -52,12 +53,11 @@ public class CorreoCemService {
                             + firma
                             + "</body></html>";
 
-            EnviaMail correo =
-                    new EnviaMail(
-                            ConfigReader.get("correo.usuario"),
-                            ConfigReader.get("correo.password"),
-                            null,
-                            null);
+            EnviaMail correo = new EnviaMail(
+                    ConfigReader.get("correo.usuario"),
+                    ConfigReader.get("correo.password"),
+                    ConfigReader.get("correo.host"),
+                    PropiedadesSmtp.generarProperties());
 
             correo.setFrom(
                     ConfigReader.get("correo.remitente"));

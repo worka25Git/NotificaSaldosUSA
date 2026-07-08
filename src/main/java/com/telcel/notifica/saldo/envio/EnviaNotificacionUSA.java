@@ -179,7 +179,7 @@ public class EnviaNotificacionUSA {
                                           int hora,
                                           List<Saldos> contactosCadena) {
 
-        logger.info("COMENZZANDO ENVIO DE CORREOS DE SALDO AGOTADO...");
+        logger.info("COMENZANDO ENVIO DE CORREOS DE SALDO AGOTADO...");
 
         CorreoSaldoAgotadoService service =
                 new CorreoSaldoAgotadoService();

@@ -4,6 +4,7 @@ import com.telcel.mail.EnviaMail;
 import com.telcel.notifica.saldo.dao.Saldos;
 import com.telcel.notifica.saldo.utils.ConfigReader;
 import com.telcel.notifica.saldo.utils.GetUtil;
+import com.telcel.notifica.saldo.utils.PropiedadesSmtp;
 
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class CorreoSaldoAgotadoService {
             EnviaMail correo = new EnviaMail(
                     ConfigReader.get("correo.usuario"),
                     ConfigReader.get("correo.password"),
-                    null,
-                    null);
+                    ConfigReader.get("correo.host"),
+                    PropiedadesSmtp.generarProperties());
 
             correo.setFrom(
                     ConfigReader.get("correo.remitente"));
