@@ -2,10 +2,15 @@ package com.telcel.notifica.saldo.service;
 
 import clientealarma.ClienteALARMA;
 import com.telcel.notifica.saldo.dao.Saldos;
+import com.telcel.notifica.saldo.utils.ConfigReader;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class SmsService {
+
+    private static final Logger logger =
+            Logger.getLogger(SmsService.class.getName());
 
     public boolean enviar(Saldos saldo,
                           List<Saldos> contactos) {
@@ -28,14 +33,22 @@ public class SmsService {
                                 + saldo.getMonto()
                                 + " Dls.";
 
-                ClienteALARMA cliente = new ClienteALARMA();
+                String url = ConfigReader.get("sms.url");
+                logger.info("URL conf: " + url);
+                if (url.isBlank()) {
+                    url = "http://intranet.telcel.com:9046/despachador-sms-ws/mensaje";
+                    logger.info("URL: " + url);
+                }
+
+                ClienteALARMA cliente = new ClienteALARMA(url);
+
 
                 String respuesta =
                         cliente.enviarSMSConCurl(
                                 contacto.getTelefono(),
                                 mensaje);
 
-                System.out.println(
+                logger.info(
                         "SMS -> "
                                 + contacto.getTelefono()
                                 + " Respuesta="
@@ -48,9 +61,7 @@ public class SmsService {
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
 
         return enviado;

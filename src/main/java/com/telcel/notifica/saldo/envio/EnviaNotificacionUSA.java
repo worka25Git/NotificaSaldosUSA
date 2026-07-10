@@ -29,7 +29,6 @@ public class EnviaNotificacionUSA {
             Logger.getLogger(EnviaNotificacionUSA.class.getName());
 
     private static Handler handler;
-
     private static final SimpleFormatter formatter =
             new SimpleFormatter();
 
@@ -39,33 +38,22 @@ public class EnviaNotificacionUSA {
     }
 
     private List<Saldos> consultaSaldo = new ArrayList<>();
-
     private List<Saldos> destinatarios = new ArrayList<>();
-
     private SaldoService saldoService = new SaldoService();
-
     private final Set<Saldos> notificaCEM = new HashSet<>();
 
-    private final String[] Hora1 = {"1"};
-
-    private final String[] Hora2 = {"2", "3"};
-
-    private final String[] Hora3 = {"1", "2", "3"};
-
-    private final String[] Hora4 = {"4", "5"};
-
-    private final String[] Hora5 = {"4", "5", "6"};
-
-    private final String[] Hora6 = {"1", "4", "5"};
-
-    private final String[] Hora7 = {"5", "6"};
-
-    private final String[] Hora8 = {"3", "5"};
+    private final String[] Hora1 = {"1"}; //8
+    private final String[] Hora2 = {"2", "3"}; // 9,13,15,19,21
+    private final String[] Hora3 = {"1", "2", "3"};// 11,17
+    private final String[] Hora4 = {"4", "5"}; // 12,16,18
+    private final String[] Hora5 = {"4", "5", "6"}; //10
+    private final String[] Hora6 = {"1", "4", "5"}; //14,20
+    private final String[] Hora7 = {"5", "6"}; //22
+    private final String[] Hora8 = {"3", "5"}; //0
 
 
     public static void main(String[] args) {
         try {
-
             ConfigReader.load("./conf/Configuracion.conf");
             EnviaNotificacionUSA app =
                     new EnviaNotificacionUSA();
@@ -73,9 +61,7 @@ public class EnviaNotificacionUSA {
 
         } catch (Exception e) {
             e.printStackTrace();
-
         }
-
     }
 
 
@@ -118,7 +104,6 @@ public class EnviaNotificacionUSA {
             notificarCEM(hora);
 
         } finally {
-
             cerrarLogger();
 
         }
